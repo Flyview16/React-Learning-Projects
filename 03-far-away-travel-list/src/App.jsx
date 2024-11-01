@@ -5,13 +5,37 @@ import PackingList from "./components/PackingList";
 import Stats from "./components/Stats";
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems((items) => {
+      return [...items, item];
+    });
+  }
+
+  function handleDeleteItems(id) {
+    setItems((items) => items.filter((item) => item.id !== id));
+  }
+
+  function handleToggleItem(id) {
+    setItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
+  }
+
   return (
     <>
       <div className="app">
         <Logo />
-        <Form />
-        <PackingList />
-        <Stats />
+        <Form onAddItems={handleAddItems} />
+        <PackingList
+          items={items}
+          onDeleteItem={handleDeleteItems}
+          onToggleItem={handleToggleItem}
+        />
+        <Stats items={items} />
       </div>
     </>
   );
